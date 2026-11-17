@@ -1,0 +1,6 @@
+{
+  "name": "Waypoint",
+  "description": "Interactive game walkthrough tracker, multi-console bug forum, and gameplay clip & performance telemetry hub.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
