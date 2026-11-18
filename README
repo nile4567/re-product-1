@@ -1,0 +1,152 @@
+waypoint
+
+Author: [Nile Robinson] · Course: CMP 464/343 Product 1 · Last updated: [11/16/26]
+About Me (the User)
+Who am I in the context of this problem? What roles am I playing (student, employee, parent, athlete, gamer…)?
+I am a multi-console gamer playing long, systems-heavy campaigns across PS5, PC and Switch  during evening and weekend sessions, often taking breaks between plays.
+
+The last 3 times this happened: Real, recent moments. For each: when and where, what went wrong, what it cost, what you did.
+I had already picked up a missable upgrade core before draining the Flooded Cathedral, spent 35 minutes backtracking through empty rooms, and hit a severe frame-pacing hitch at a sluice valve without knowing a 10-second camera workaround existed.
+
+Resumed from Quick Resume into pitch-black ground textures, spent 40 minutes searching Discord and Reddit threads to figure out whether my save file was corrupted or if it was a known bug,and quit early out of frustration.
+
+Wanted to verify whether frame drops in a boss arena were caused by my display preset or a recent patch, recorded a gameplay clip.
+
+What it costs me: Be specific. How often, how much?
+⏱️ Time: 2–3 hours per week spent backtracking through cleared zones, skimming long wiki pages, and hunting through scattered threads for console-specific fixes.
+
+💸 Money: Occasional wasted expansion purchases or second-copy buys when unresolved performance regressions make one console version feel broken.
+
+🔋 Energy: Context switching fatigue from juggling 5 to 8 browser tabs, Discord searches and google searches during a short evening play window.
+
+🙂 Joy: Boss encounters are spoiled by wiki headers and broken immersion when an unexpected hitch or crash derails a session.
+
+2. Problem Statement
+Gut check: I need one calm, spoiler safe companion for my campaign progress, console specific bug workarounds, and gameplay performance clips because splitting walkthrough notes, hardware glitches, and frame-rate benchmarks across wikis, chat servers, and video folders wastes my play sessions.
+
+
+I need [X] because [Y].
+Five Whys:
+Why do I lose momentum mid-campaign?
+Why do I get stuck on unexpected crashes or stutters?
+Why can't I tell if a frame-rate dip is my hardware's fault or a patch regression?
+Why do wikis and social feeds fail to connect these pieces?
+Why does that hurt my gaming overall?
+
+Problem statement: 
+I sometimes run into a sudden glitch or frame drop, I struggle to remember where I left off without seeing spoilers, locate a verified fix for my exact console, and pair gameplay footage with frame-rate numbers, which costs me 2 to 3 hours of play time each week.This happens because of the console specific bug workarounds, and performance clips live in disconnected places with no shared structure. Right now I juggle browser wiki tabs, google searches, but those sources spoil upcoming bosses, bury working fixes under old patches, and video proof from YouTube.
+
+I'll know this is solved when:
+I can sit down, see my next uncompleted chapter without seeing a boss spoiler and check whether an issue on my console already has a confirmed workaround.
+
+Check: none of these words appear: app, website, platform, dashboard, tool, AI, track, automate, notify, feature.
+Existing Solutions
+
+
+What I use or tried
+What it does well
+Why it falls short for me
+Game Wikis (IGN / Fextralife)
+Detailed item descriptions, maps, and full walkthrough prose
+Static pages with no personal checklist persistence, heavy ad clutter, and frequent late-game spoilers.
+Reddit & Discord Servers
+Fast community reactions right after a patch drops
+PS5, Xbox, PC, and Switch issues are mixed together; verified workarounds get buried within hours.
+Console Capture Gallery + Notes
+Saves raw video clips and quick personal text reminders
+Isolated from chapter progress, community workarounds, and structured FPS / 1% low comparisons.
+Technical Breakdown Videos (YouTube)
+Deep launch-week frame-rate analysis across consoles
+Read-only; you cannot upload your own zone captures or filter metrics by current patch and zone.
+
+
+
+
+The gap: There is no single, structured workspace that connects personal spoiler safe chapter progress, console filtered bug workarounds, and playable user gameplay clips with frame rate telemetry.
+
+[Your answer]
+
+Features & Benefits
+
+Feature (what it does)
+Benefit (how my life gets better)
+MVP or Later?
+Interactive Chapter & Collectible Checklists
+Resume at the exact next step and catch missable items without re-reading cleared sections
+MVP
+Spoiler-Protected Boss Strategy Toggles
+Keep boss phases and weaknesses hidden until you explicitly choose to reveal them
+MVP
+Multi-Console Bug Forum & Workarounds
+Filter issues by exact console, severity, and patch; confirm affected counts; pin verified fixes
+MVP
+Gameplay Clip Upload + Frame-Rate Telemetry
+Upload .mp4/.webm/.mov captures alongside Avg FPS, 1% Low FPS, and Frame Time (ms) to compare hardware
+MVP
+Multi-Game Switcher & Chapter Reset
+Track multiple campaigns and cleanly reset chapters for New Game+ runs
+MVP 
+User Accounts, Moderation & Cloud Video CDN
+Sync progress across devices and scale multi-user clip storage beyond local disk
+Later
+Patch-Note Diff Alerts
+Surface when a new patch resolves an open console bug you previously confirmed
+Later
+
+MVP (the skateboard):
+Persistent chapter/collectible checklists with spoiler-guarded boss tactics.
+
+Console-filterable bug forum with confirmation voting and verified workaround replies.
+
+Gameplay video uploader paired with FPS / 1% Low / Frame Time telemetry and cross-console bar comparisons.
+
+Later: User authentication/profiles, cloud object storage + transcoding for large 4K clips, and patch-note status syncing.
+
+
+Not doing: Live chat rooms, automated memory-reading game overlays, ad-supported open wiki editing, or live game broadcasting.
+
+
+
+
+5. 
+Tech Stack
+Front end
+Surface: Responsive Web Application (1440px desktop sidebar workspace + mobile drawer for couch/handheld companion use).
+
+Tools: React 19, TypeScript, Vite 8, Tailwind CSS v4, Lucide React icons, HTML5 <video> and <canvas> replay previews.
+
+Why: Gamers already keep a browser open on a second monitor, tablet, or phone next to their console; a responsive web client requires zero installation and handles video playback and interactive checklists natively.
+
+Back end
+Piece
+Choice
+Why
+Server / API
+Node.js + Express (server.ts via tsx)
+Serves REST endpoints for progress toggles, bug threads/replies, clip metadata, and Vite dev middleware from a single port 3000
+Data storage
+Atomic JSON store.data/waypoint-store.json  + disk video directory .data/uploads/
+Zero external database setup for local/single-instance runs; supports HTTP  206 Partial Content Range streaming for smooth video  scrubbing.
+Outside services (optional)
+None required for MVP
+Keeps local/demo runs self-contained; can swap storage later for Firestore/PostgreSQL + Cloud Storage when adding multi-user accounts.
+Hosting / deploy
+Single containerized Node server npm run build + npm start)
+Simple deployment on Cloud Run or any Node host with persistent/object storage mounted for .data 
+
+
+Architecture sketch:
+Text
+Browser UI (React 19 + Tailwind v4)
+  ├── Overview & Interactive Guides  ──▶  POST /api/progress/toggle, /reset-chapter
+  ├── Multi-Console Bug Forum        ──▶  POST /api/bugs, /:id/vote, /:id/status, /:id/replies
+  └── Clips & Telemetry (<video>)    ──▶  POST /api/uploads (raw video) + POST /api/clips
+                                            │
+                                            ▼
+                              Express Server (server.ts :3000)
+                              ├── .data/waypoint-store.json (atomic state)
+                              └── .data/uploads/* (HTTP Range video streaming)
+
+
+Open Questions
+Bug lifecycle hygiene: Who gets permission to flip a community bug thread's status from?
